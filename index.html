@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PigmentDocs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+:root {
+  /* pastel palette */
+  --rose:    #f9a8c9;  --rose-deep:  #e75480;  --rose-bg:   #fff0f6;  --rose-mid: #fbd0e5;
+  --violet:  #c4b5fd;  --violet-deep:#7c3aed;  --violet-bg: #f3f0ff;  --violet-mid:#ddd6fe;
+  --amber:   #fcd34d;  --amber-deep: #d97706;  --amber-bg:  #fffbeb;  --amber-mid: #fde68a;
+  --sky:     #7dd3fc;  --sky-deep:   #0284c7;  --sky-bg:    #f0f9ff;  --sky-mid:   #bae6fd;
+  --mint:    #6ee7b7;  --mint-deep:  #059669;  --mint-bg:   #ecfdf5;  --mint-mid:  #a7f3d0;
+  --peach:   #fdba74;  --peach-deep: #ea580c;  --peach-bg:  #fff7ed;  --peach-mid: #fed7aa;
+
+  /* base */
+  --bg: #faf8ff;
+  --white: #ffffff;
+  --glass: rgba(255,255,255,0.72);
+  --glass2: rgba(255,255,255,0.5);
+  --t1: #1e1b4b;
+  --t2: #6b6f8a;
+  --t3: #b0b3c8;
+  --border: rgba(180,170,220,0.18);
+  --border2: rgba(180,170,220,0.32);
+  --shadow-sm: 0 2px 12px rgba(100,80,180,0.07);
+  --shadow-md: 0 4px 24px rgba(100,80,180,0.10);
+  --shadow-lg: 0 8px 40px rgba(100,80,180,0.14);
+
+  --font: 'Nunito', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --r: 20px;
+  --rs: 12px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--t1);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 20% -10%, rgba(196,181,253,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 90% 10%, rgba(249,168,201,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 50% 100%, rgba(110,231,183,0.12) 0%, transparent 60%);
+  background-attachment: fixed;
+}
+
+.app { max-width: 430px; margin: 0 auto; min-height: 100vh; padding-bottom: calc(78px + var(--safe-bottom)); }
+
+/* ── HEADER ── */
+.header {
+  position: sticky; top: 0; z-index: 50;
+  padding: 18px 18px 14px;
+  background: rgba(250,248,255,0.82);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+
+.logo { display: flex; align-items: center; gap: 9px; }
+.logo-icon {
+  width: 36px; height: 36px; border-radius: 11px;
+  background: linear-gradient(135deg, var(--rose) 0%, var(--violet) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; box-shadow: 0 4px 12px rgba(196,181,253,0.4);
+}
+.logo-text { font-size: 18px; font-weight: 900; color: var(--t1); letter-spacing: -0.5px; }
+.logo-text span { color: var(--violet-deep); }
+
+.header-btns { display: flex; gap: 8px; }
+.hbtn {
+  width: 38px; height: 38px; border-radius: 12px;
+  background: var(--glass); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--t2);
+  transition: all 0.18s; box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(8px);
+}
+.hbtn:active { transform: scale(0.92); }
+.hbtn.primary {
+  background: linear-gradient(135deg, var(--violet-deep), #9333ea);
+  color: #fff; border: none;
+  box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+}
+
+/* ── SEARCH ── */
+.search-wrap { position: relative; }
+.search-ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--t3); display: flex; pointer-events: none; }
+.search-input {
+  width: 100%;
+  background: var(--glass);
+  border: 1.5px solid var(--border2);
+  border-radius: 14px;
+  padding: 11px 40px 11px 40px;
+  font-family: var(--font); font-size: 14px; font-weight: 500;
+  color: var(--t1); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  backdrop-filter: blur(8px);
+  -webkit-appearance: none;
+}
+.search-input::placeholder { color: var(--t3); font-weight: 500; }
+.search-input:focus { border-color: var(--violet); box-shadow: 0 0 0 4px rgba(196,181,253,0.2); }
+.search-clear {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--violet-mid); border: none; color: var(--violet-deep);
+  font-size: 11px; font-weight: 700; cursor: pointer;
+  display: none; align-items: center; justify-content: center;
+}
+.search-clear.on { display: flex; }
+
+/* ── CATEGORY PILLS ── */
+.cat-strip { display: flex; gap: 8px; overflow-x: auto; padding: 14px 18px 4px; scrollbar-width: none; }
+.cat-strip::-webkit-scrollbar { display: none; }
+.pill {
+  flex-shrink: 0; display: flex; align-items: center; gap: 5px;
+  padding: 7px 14px; border-radius: 30px;
+  font-size: 12px; font-weight: 700;
+  background: var(--glass); border: 1.5px solid var(--border2);
+  color: var(--t2); cursor: pointer;
+  transition: all 0.18s; white-space: nowrap;
+  backdrop-filter: blur(6px);
+}
+.pill:active { transform: scale(0.95); }
+.pill .pdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.pill.active { color: #fff; border-color: transparent; box-shadow: 0 4px 14px var(--pill-shadow); background: var(--pill-bg); }
+
+.pill[data-cat="all"]          { --pill-bg: linear-gradient(135deg,var(--violet),var(--rose)); --pill-shadow: rgba(196,181,253,0.4); }
+.pill[data-cat="Pigment"]      { --pill-bg: linear-gradient(135deg,var(--rose),#f472b6);       --pill-shadow: rgba(249,168,201,0.45); }
+.pill[data-cat="Dispersion"]   { --pill-bg: linear-gradient(135deg,var(--violet),#818cf8);     --pill-shadow: rgba(196,181,253,0.45); }
+.pill[data-cat="Presentation"] { --pill-bg: linear-gradient(135deg,var(--amber),#fb923c);      --pill-shadow: rgba(252,211,77,0.45); color:#5c3900; }
+.pill[data-cat="Presentation"].active { color: #fff; }
+.pill[data-cat="Brochure"]     { --pill-bg: linear-gradient(135deg,var(--sky),#38bdf8);        --pill-shadow: rgba(125,211,252,0.45); }
+.pill[data-cat="Plastic"]      { --pill-bg: linear-gradient(135deg,var(--mint),#34d399);       --pill-shadow: rgba(110,231,183,0.45); }
+.pill[data-cat="Regulatory"]   { --pill-bg: linear-gradient(135deg,var(--peach),#fb923c);      --pill-shadow: rgba(253,186,116,0.45); }
+
+/* ── STATS ── */
+.stats { display: flex; gap: 10px; padding: 14px 18px 6px; }
+.stat {
+  flex: 1; background: var(--glass); border: 1px solid var(--border2);
+  border-radius: 18px; padding: 13px 10px; text-align: center;
+  box-shadow: var(--shadow-sm); backdrop-filter: blur(8px);
+}
+.stat-num { font-family: var(--font); font-size: 24px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+.stat-lbl { font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: 0.7px; }
+
+/* ── SECTION ── */
+.sec-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px 10px; }
+.sec-lbl { font-size: 12px; font-weight: 800; color: var(--t3); text-transform: uppercase; letter-spacing: 1.2px; }
+.sec-count { font-size: 12px; font-weight: 600; color: var(--t3); }
+
+/* ── CARDS ── */
+.cards { padding: 0 18px; display: flex; flex-direction: column; gap: 12px; }
+
+.card {
+  background: var(--glass);
+  border: 1.5px solid var(--border2);
+  border-radius: 22px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+  animation: fadeUp 0.28s cubic-bezier(0.34,1.3,0.64,1) both;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px) scale(0.97); } to { opacity:1; transform:none; } }
+.card:active { transform: scale(0.985); }
+.card.sel { border-color: var(--cc-deep); box-shadow: 0 0 0 3px var(--cc-mid), var(--shadow-md); }
+
+/* gradient header strip per card */
+.card-head {
+  padding: 14px 15px 12px;
+  background: linear-gradient(135deg, var(--cc-bg) 0%, var(--white) 100%);
+  display: flex; align-items: flex-start; gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.card-icon {
+  width: 46px; height: 46px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--cc-mid), var(--cc-bg));
+  border: 1.5px solid rgba(255,255,255,0.8);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+.card-info { flex: 1; min-width: 0; }
+.card-name { font-size: 15px; font-weight: 800; color: var(--t1); margin-bottom: 6px; line-height: 1.25; }
+.card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.tag {
+  font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 30px;
+  letter-spacing: 0.4px; text-transform: uppercase; border: 1.5px solid transparent;
+}
+.tag-cat { color: var(--cc-deep); background: var(--cc-bg); border-color: var(--cc-mid); }
+.tag-tds  { background: #fff0f6; color: #be185d; border-color: #fbd0e5; }
+.tag-msds { background: #f3f0ff; color: #6d28d9; border-color: #ddd6fe; }
+.tag-ppt  { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+.tag-pdf  { background: #f0f9ff; color: #0369a1; border-color: #bae6fd; }
+.tag-card { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
+.tag-reg  { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
+
+/* fields grid */
+.card-fields {
+  padding: 12px 15px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.cf {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+.cf-l { font-size: 9px; font-weight: 800; color: var(--t3); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 3px; }
+.cf-v { font-size: 12px; font-weight: 700; color: var(--t2); word-break: break-word; line-height: 1.3; }
+.cf-v.cas { font-family: var(--mono); font-size: 11px; color: var(--t1); }
+.cf-v.accent { color: var(--cc-deep); }
+
+/* actions */
+.card-actions { display: flex; border-top: 1px solid var(--border); }
+.ca {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px;
+  padding: 11px 8px;
+  font-family: var(--font); font-size: 12px; font-weight: 700;
+  border: none; background: transparent; cursor: pointer; color: var(--t3);
+  transition: all 0.15s;
+}
+.ca:active { background: rgba(196,181,253,0.1); }
+.ca + .ca { border-left: 1px solid var(--border); }
+.ca-dl:active { color: var(--mint-deep); }
+.ca-sel.on { color: var(--violet-deep); background: var(--violet-bg); }
+
+/* ── EMPTY ── */
+.empty { text-align: center; padding: 70px 20px; }
+.empty-icon { font-size: 52px; margin-bottom: 14px; filter: saturate(0.7); }
+.empty-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; color: var(--t2); }
+.empty-sub { font-size: 13px; color: var(--t3); font-weight: 500; }
+
+/* ── COMPARE BAR ── */
+.cmp-bar {
+  position: fixed; bottom: 0; left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  width: 100%; max-width: 430px;
+  padding: 0 16px calc(14px + var(--safe-bottom));
+  z-index: 80; transition: transform 0.35s cubic-bezier(0.34,1.4,0.64,1);
+}
+.cmp-bar.on { transform: translateX(-50%) translateY(0); }
+.cmp-inner {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  border-radius: 22px; padding: 14px 16px;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 8px 40px rgba(49,46,129,0.35);
+  border: 1px solid rgba(196,181,253,0.2);
+}
+.cmp-info { flex: 1; min-width: 0; }
+.cmp-t { font-size: 13px; font-weight: 800; color: #fff; }
+.cmp-s { font-size: 11px; font-weight: 600; color: rgba(196,181,253,0.8); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 1px; }
+.cbtn {
+  padding: 9px 16px; border-radius: 12px;
+  font-family: var(--font); font-size: 12px; font-weight: 800;
+  border: none; cursor: pointer; flex-shrink: 0; transition: all 0.15s;
+}
+.cbtn:active { transform: scale(0.95); }
+.cbtn-do { background: linear-gradient(135deg, var(--rose), var(--violet)); color: #fff; box-shadow: 0 4px 14px rgba(249,168,201,0.4); }
+.cbtn-do:disabled { opacity: 0.4; cursor: default; box-shadow: none; }
+.cbtn-clr { background: rgba(255,255,255,0.12); color: rgba(196,181,253,0.9); }
+
+/* ── BOTTOM NAV ── */
+.bnav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 430px;
+  background: rgba(250,248,255,0.88);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid var(--border2);
+  display: flex; padding: 8px 0 calc(8px + var(--safe-bottom));
+  z-index: 60;
+}
+.bni {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 4px 0; cursor: pointer; color: var(--t3);
+  font-size: 10px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase;
+  transition: color 0.15s;
+}
+.bni.active { color: var(--violet-deep); }
+.bni-indicator {
+  width: 24px; height: 3px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--rose), var(--violet));
+  margin-bottom: 5px; opacity: 0; transition: opacity 0.2s;
+}
+.bni.active .bni-indicator { opacity: 1; }
+
+/* ── OVERLAY + SHEETS ── */
+.overlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(30,27,75,0.35);
+  opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+}
+.overlay.on { opacity: 1; pointer-events: all; }
+
+.sheet {
+  position: fixed; bottom: 0; left: 50%;
+  transform: translateX(-50%) translateY(108%);
+  width: 100%; max-width: 430px;
+  background: rgba(250,248,255,0.97);
+  border-radius: 26px 26px 0 0;
+  z-index: 101; max-height: 93vh;
+  display: flex; flex-direction: column;
+  transition: transform 0.32s cubic-bezier(0.32,0.72,0,1);
+  padding-bottom: var(--safe-bottom);
+  border: 1px solid var(--border2); border-bottom: none;
+  box-shadow: 0 -8px 40px rgba(100,80,180,0.12);
+  backdrop-filter: blur(20px);
+}
+.sheet.on { transform: translateX(-50%) translateY(0); }
+
+.sh-handle { width: 40px; height: 5px; background: var(--violet-mid); border-radius: 3px; margin: 12px auto 0; flex-shrink: 0; cursor: pointer; opacity: 0.6; }
+
+.sh-hd {
+  padding: 14px 18px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sh-hd-l { display: flex; align-items: center; gap: 10px; }
+.sh-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+.sh-title { font-size: 17px; font-weight: 900; color: var(--t1); }
+.sh-close {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--violet-bg); border: none; color: var(--violet-deep);
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+}
+.sh-close:active { background: var(--violet-mid); }
+
+.sh-body { flex: 1; overflow-y: auto; padding: 18px; -webkit-overflow-scrolling: touch; }
+.sh-body::-webkit-scrollbar { width: 0; }
+
+/* ── DETAIL SHEET ── */
+.det-hero {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px; margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--cc-bg) 0%, rgba(255,255,255,0.3) 100%);
+  border-radius: 18px; border: 1px solid var(--border2);
+}
+.det-icon {
+  width: 60px; height: 60px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--cc-mid), var(--cc-bg));
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08); border: 1.5px solid rgba(255,255,255,0.9);
+}
+.det-name { font-size: 18px; font-weight: 900; color: var(--t1); margin-bottom: 7px; line-height: 1.25; }
+.det-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+.det-sec { margin-bottom: 20px; }
+.det-sec-t { font-size: 10px; font-weight: 800; color: var(--t3); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
+.det-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.det-f {
+  background: rgba(255,255,255,0.7); border-radius: 13px;
+  padding: 11px 13px; border: 1px solid var(--border2);
+}
+.det-f.full { grid-column: 1/-1; }
+.det-fl { font-size: 9px; font-weight: 800; color: var(--t3); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 3px; }
+.det-fv { font-size: 13px; font-weight: 700; color: var(--t1); line-height: 1.4; }
+.det-fv.mono { font-family: var(--mono); font-size: 12px; }
+.det-fv.note { font-weight: 500; font-size: 13px; color: var(--t2); }
+.btn-dl {
+  width: 100%; border: none; padding: 15px; border-radius: 16px;
+  font-family: var(--font); font-size: 15px; font-weight: 800;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-bottom: 10px; color: #fff; transition: opacity 0.15s;
+  box-shadow: 0 6px 20px var(--cc-shadow);
+  background: linear-gradient(135deg, var(--cc-deep), var(--cc-deep2));
+}
+.btn-dl:active { opacity: 0.85; transform: scale(0.98); }
+.btn-sel-det {
+  width: 100%; padding: 13px; border-radius: 16px;
+  font-family: var(--font); font-size: 14px; font-weight: 800;
+  cursor: pointer; transition: all 0.2s;
+  background: var(--glass); color: var(--t2);
+  border: 1.5px solid var(--border2);
+}
+.btn-sel-det.on { color: var(--violet-deep); background: var(--violet-bg); border-color: var(--violet-mid); }
+
+/* ── COMPARE SHEET ── */
+.cmp-pair { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; margin-bottom: 20px; }
+.cmp-dc { border-radius: 16px; padding: 14px; border: 1.5px solid var(--border2); background: rgba(255,255,255,0.6); }
+.cmp-dc-icon { font-size: 22px; margin-bottom: 7px; }
+.cmp-dc-name { font-size: 12px; font-weight: 800; line-height: 1.3; margin-bottom: 3px; }
+.cmp-dc-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--t3); }
+.cmp-vs {
+  font-family: var(--font); font-size: 11px; font-weight: 900;
+  color: #fff; background: linear-gradient(135deg, var(--violet), var(--rose));
+  width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(196,181,253,0.4); flex-shrink: 0; align-self: center;
+}
+.cmp-tbl { width: 100%; border-collapse: collapse; }
+.cmp-tbl th { font-size: 10px; font-weight: 800; color: var(--t3); text-transform: uppercase; letter-spacing: 0.7px; padding: 8px 10px; border-bottom: 1.5px solid var(--border2); text-align: left; }
+.cmp-tbl td { padding: 10px 10px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; line-height: 1.4; }
+.cmp-tbl tr:last-child td { border-bottom: none; }
+.cmp-tbl td:first-child { font-size: 11px; color: var(--t3); font-weight: 700; width: 80px; }
+.td-a { font-weight: 700; }
+.td-b { font-weight: 700; }
+.mtag { display: inline-block; font-size: 10px; padding: 3px 8px; border-radius: 20px; font-weight: 800; }
+.m-eq { background: var(--mint-bg); color: var(--mint-deep); border: 1px solid var(--mint-mid); }
+.m-df { background: var(--rose-bg); color: var(--rose-deep); border: 1px solid var(--rose-mid); }
+.btn-ai {
+  width: 100%; border: none;
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  color: #fff; padding: 15px; border-radius: 18px;
+  font-family: var(--font); font-size: 14px; font-weight: 800;
+  cursor: pointer; margin-top: 18px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 6px 24px rgba(49,46,129,0.3);
+  transition: opacity 0.15s;
+}
+.btn-ai:active { opacity: 0.85; }
+
+/* ── UPLOAD SHEET ── */
+.gs-banner {
+  display: flex; align-items: center; gap: 12px;
+  background: linear-gradient(135deg, var(--mint-bg), var(--sky-bg));
+  border: 1.5px solid var(--mint-mid);
+  border-radius: 16px; padding: 13px 14px; margin-bottom: 16px;
+}
+.gs-icon { font-size: 24px; flex-shrink: 0; }
+.gs-t { font-size: 13px; font-weight: 800; color: var(--t1); margin-bottom: 2px; }
+.gs-s { font-size: 11px; font-weight: 600; color: var(--t3); }
+.up-zone {
+  border: 2px dashed var(--violet-mid); border-radius: 18px;
+  padding: 28px 18px; text-align: center; cursor: pointer;
+  background: var(--violet-bg); transition: all 0.2s; margin-bottom: 18px;
+}
+.up-zone:active { background: var(--violet-mid); }
+.up-zone-i { font-size: 32px; margin-bottom: 8px; }
+.up-zone-t { font-size: 14px; font-weight: 800; color: var(--t1); margin-bottom: 4px; }
+.up-zone-s { font-size: 12px; font-weight: 500; color: var(--t3); }
+.fl { margin-bottom: 14px; }
+.fl-l { font-size: 11px; font-weight: 800; color: var(--t2); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 7px; display: block; }
+.fi, .fs, .fta {
+  width: 100%; background: rgba(255,255,255,0.8);
+  border: 1.5px solid var(--border2); border-radius: 13px;
+  padding: 11px 14px; font-family: var(--font); font-size: 14px; font-weight: 500;
+  color: var(--t1); outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+}
+.fi:focus, .fs:focus, .fta:focus { border-color: var(--violet); box-shadow: 0 0 0 4px rgba(196,181,253,0.18); }
+.fi::placeholder, .fta::placeholder { color: var(--t3); }
+.fs option { background: #faf8ff; }
+.fta { resize: vertical; min-height: 80px; line-height: 1.5; }
+.f2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-save {
+  width: 100%; border: none;
+  background: linear-gradient(135deg, var(--rose-deep), var(--violet-deep));
+  color: #fff; padding: 15px; border-radius: 16px;
+  font-family: var(--font); font-size: 15px; font-weight: 800;
+  cursor: pointer; margin-top: 4px;
+  box-shadow: 0 6px 20px rgba(196,181,253,0.35);
+  transition: opacity 0.15s;
+}
+.btn-save:active { opacity: 0.85; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-icon">🎨</div>
+        <div class="logo-text">pigment<span>docs</span></div>
+      </div>
+      <div class="header-btns">
+        <div class="hbtn">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg>
+        </div>
+        <div class="hbtn primary" onclick="openSheet('uploadSheet')">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <div class="search-ico"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+      <input class="search-input" id="searchInput" type="search" placeholder="Search product, CAS no., shade, supplier…" autocomplete="off" spellcheck="false">
+      <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+    </div>
+  </div>
+
+  <div class="cat-strip" id="catStrip">
+    <div class="pill active" data-cat="all"><span class="pdot" style="background:#fff;opacity:.7"></span>All</div>
+    <div class="pill" data-cat="Pigment"><span class="pdot" style="background:var(--rose-deep)"></span>Pigments</div>
+    <div class="pill" data-cat="Dispersion"><span class="pdot" style="background:var(--violet-deep)"></span>Dispersions</div>
+    <div class="pill" data-cat="Presentation"><span class="pdot" style="background:var(--amber-deep)"></span>Presentations</div>
+    <div class="pill" data-cat="Brochure"><span class="pdot" style="background:var(--sky-deep)"></span>Brochures</div>
+    <div class="pill" data-cat="Plastic"><span class="pdot" style="background:var(--mint-deep)"></span>Plastic Cards</div>
+    <div class="pill" data-cat="Regulatory"><span class="pdot" style="background:var(--peach-deep)"></span>Regulatory</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num" style="background:linear-gradient(135deg,var(--violet-deep),var(--rose-deep));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="stAll">24</div>
+      <div class="stat-lbl">Total</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="background:linear-gradient(135deg,var(--rose-deep),#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="stTDS">14</div>
+      <div class="stat-lbl">TDS</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="background:linear-gradient(135deg,var(--violet-deep),#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="stMSDS">10</div>
+      <div class="stat-lbl">MSDS</div>
+    </div>
+  </div>
+
+  <div class="sec-row">
+    <div class="sec-lbl">Documents</div>
+    <div class="sec-count" id="resCnt"></div>
+  </div>
+
+  <div class="cards" id="cardGrid"></div>
+  <div style="height:14px"></div>
+</div>
+
+<!-- COMPARE BAR -->
+<div class="cmp-bar" id="cmpBar">
+  <div class="cmp-inner">
+    <div class="cmp-info">
+      <div class="cmp-t"><span id="selCnt">0</span> selected</div>
+      <div class="cmp-s" id="selNames">Select 2 documents to compare</div>
+    </div>
+    <button class="cbtn cbtn-clr" onclick="clearSel()">Clear</button>
+    <button class="cbtn cbtn-do" id="btnDo" onclick="openCmpSheet()" disabled>Compare →</button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <div class="bni active" data-p="home" onclick="setPage('home')">
+    <div class="bni-indicator"></div>
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </div>
+  <div class="bni" data-p="compare" onclick="setPage('compare')">
+    <div class="bni-indicator"></div>
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="18" rx="1.5"/></svg>
+    Compare
+  </div>
+  <div class="bni" data-p="add" onclick="openSheet('uploadSheet')">
+    <div class="bni-indicator"></div>
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Add
+  </div>
+  <div class="bni" data-p="settings" onclick="setPage('settings')">
+    <div class="bni-indicator"></div>
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07 10 10 0 0 0 19.07 4.93z"/></svg>
+    Settings
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+<!-- DETAIL SHEET -->
+<div class="sheet" id="detailSheet">
+  <div class="sh-handle" onclick="closeAll()"></div>
+  <div class="sh-hd">
+    <div class="sh-hd-l"><div class="sh-dot" id="detDot"></div><div class="sh-title">Document Details</div></div>
+    <button class="sh-close" onclick="closeAll()">✕</button>
+  </div>
+  <div class="sh-body" id="detBody"></div>
+</div>
+
+<!-- COMPARE SHEET -->
+<div class="sheet" id="cmpSheet">
+  <div class="sh-handle" onclick="closeAll()"></div>
+  <div class="sh-hd">
+    <div class="sh-hd-l"><div class="sh-title">Comparison</div></div>
+    <button class="sh-close" onclick="closeAll()">✕</button>
+  </div>
+  <div class="sh-body" id="cmpBody"></div>
+</div>
+
+<!-- UPLOAD SHEET -->
+<div class="sheet" id="uploadSheet">
+  <div class="sh-handle" onclick="closeAll()"></div>
+  <div class="sh-hd">
+    <div class="sh-hd-l"><div class="sh-dot" style="background:linear-gradient(135deg,var(--rose),var(--violet));width:22px;height:11px;border-radius:6px"></div><div class="sh-title">Add Document</div></div>
+    <button class="sh-close" onclick="closeAll()">✕</button>
+  </div>
+  <div class="sh-body">
+    <div class="gs-banner">
+      <div class="gs-icon">📊</div>
+      <div><div class="gs-t">Connected to Google Sheets</div><div class="gs-s">Saving writes to your index sheet automatically</div></div>
+    </div>
+    <div class="up-zone" onclick="alert('File picker — connect to Google Drive or upload directly')">
+      <div class="up-zone-i">☁️</div>
+      <div class="up-zone-t">Upload or link file</div>
+      <div class="up-zone-s">PDF, PPT, XLSX · or paste Google Drive URL below</div>
+    </div>
+    <div class="fl"><label class="fl-l">Document Name *</label><input class="fi" placeholder="e.g. Pigment Yellow 13 — TDS"></div>
+    <div class="f2">
+      <div class="fl"><label class="fl-l">Category *</label><select class="fs"><option value="">Select…</option><option>Pigment</option><option>Dispersion</option><option>Presentation</option><option>Brochure</option><option>Plastic</option><option>Regulatory</option></select></div>
+      <div class="fl"><label class="fl-l">Doc Type *</label><select class="fs"><option value="">Select…</option><option>TDS</option><option>MSDS</option><option>PPT</option><option>PDF</option><option>CARD</option><option>REG</option></select></div>
+    </div>
+    <div class="f2">
+      <div class="fl"><label class="fl-l">Product Code</label><input class="fi" placeholder="e.g. PY-013"></div>
+      <div class="fl"><label class="fl-l">CAS Number</label><input class="fi" placeholder="e.g. 5102-83-0"></div>
+    </div>
+    <div class="f2">
+      <div class="fl"><label class="fl-l">Colour Index</label><input class="fi" placeholder="e.g. C.I. 21100"></div>
+      <div class="fl"><label class="fl-l">Shade</label><input class="fi" placeholder="e.g. Yellow"></div>
+    </div>
+    <div class="f2">
+      <div class="fl"><label class="fl-l">Application</label><select class="fs"><option value="">Select…</option><option>Coatings</option><option>Plastics</option><option>Inks</option><option>Textiles</option><option>Cosmetics</option><option>General</option></select></div>
+      <div class="fl"><label class="fl-l">Supplier</label><input class="fi" placeholder="e.g. Clariant"></div>
+    </div>
+    <div class="f2">
+      <div class="fl"><label class="fl-l">Grade</label><input class="fi" placeholder="e.g. Standard"></div>
+      <div class="fl"><label class="fl-l">Lightfastness</label><select class="fs"><option value="">—</option><option>1 – Very Poor</option><option>2 – Poor</option><option>3 – Moderate</option><option>4 – Fairly Good</option><option>5 – Good</option><option>6 – Very Good</option><option>7 – Excellent</option><option>8 – Outstanding</option></select></div>
+    </div>
+    <div class="fl"><label class="fl-l">Google Drive URL</label><input class="fi" placeholder="https://drive.google.com/…"></div>
+    <div class="fl"><label class="fl-l">Notes</label><textarea class="fta" placeholder="Version info, hazard notes, application tips…"></textarea></div>
+    <button class="btn-save" onclick="alert('Saved! In production this writes to your Google Sheet and stores the file URL.')">Save Document</button>
+    <div style="height:16px"></div>
+  </div>
+</div>
+
+<script>
+const CAT = {
+  Pigment:      { deep:'#be185d', deep2:'#e11d48', bg:'#fff0f6', mid:'#fbd0e5', shadow:'rgba(190,24,93,0.3)' },
+  Dispersion:   { deep:'#6d28d9', deep2:'#7c3aed', bg:'#f3f0ff', mid:'#ddd6fe', shadow:'rgba(109,40,217,0.3)' },
+  Presentation: { deep:'#b45309', deep2:'#d97706', bg:'#fffbeb', mid:'#fde68a', shadow:'rgba(180,83,9,0.3)'   },
+  Brochure:     { deep:'#0369a1', deep2:'#0284c7', bg:'#f0f9ff', mid:'#bae6fd', shadow:'rgba(3,105,161,0.3)'  },
+  Plastic:      { deep:'#065f46', deep2:'#059669', bg:'#ecfdf5', mid:'#a7f3d0', shadow:'rgba(6,95,70,0.3)'    },
+  Regulatory:   { deep:'#c2410c', deep2:'#ea580c', bg:'#fff7ed', mid:'#fed7aa', shadow:'rgba(194,65,12,0.3)'  },
+};
+const TC = {TDS:'tag-tds',MSDS:'tag-msds',PPT:'tag-ppt',PDF:'tag-pdf',CARD:'tag-card',REG:'tag-reg'};
+
+const DOCS = [
+  {id:1, name:'Pigment Yellow 13',         cat:'Pigment',      type:'TDS',  shade:'Yellow', cas:'5102-83-0',   code:'PY-013',  ci:'C.I. 21100', app:'Coatings',  supplier:'Clariant',     grade:'High Performance', lf:'6 – Very Good',   date:'Nov 2024', icon:'🟡', notes:'High heat stability. Suitable for solvent-based systems.', url:'#'},
+  {id:2, name:'Pigment Yellow 13',         cat:'Pigment',      type:'MSDS', shade:'Yellow', cas:'5102-83-0',   code:'PY-013',  ci:'C.I. 21100', app:'Coatings',  supplier:'Clariant',     grade:'High Performance', lf:'6 – Very Good',   date:'Nov 2024', icon:'🟡', notes:'Handle with PPE. Store below 40°C.', url:'#'},
+  {id:3, name:'Pigment Red 254',           cat:'Pigment',      type:'TDS',  shade:'Red',    cas:'122390-98-1', code:'PR-254',  ci:'C.I. 56110', app:'Plastics',  supplier:'BASF',         grade:'DPP Red',          lf:'8 – Outstanding', date:'Oct 2024', icon:'🔴', notes:'Excellent lightfastness. Heat stable to 300°C.', url:'#'},
+  {id:4, name:'Pigment Red 254',           cat:'Pigment',      type:'MSDS', shade:'Red',    cas:'122390-98-1', code:'PR-254',  ci:'C.I. 56110', app:'Plastics',  supplier:'BASF',         grade:'DPP Red',          lf:'8 – Outstanding', date:'Sep 2024', icon:'🔴', notes:'Not classified hazardous under GHS.', url:'#'},
+  {id:5, name:'Pigment Blue 15:3',         cat:'Pigment',      type:'TDS',  shade:'Blue',   cas:'147-14-8',    code:'PB-153',  ci:'C.I. 74160', app:'Inks',      supplier:'Sun Chemical', grade:'Phthalocyanine',   lf:'7 – Excellent',  date:'Nov 2024', icon:'🔵', notes:'Excellent transparency for process printing.', url:'#'},
+  {id:6, name:'Pigment Green 7',           cat:'Pigment',      type:'TDS',  shade:'Green',  cas:'1328-53-6',   code:'PG-007',  ci:'C.I. 74260', app:'General',   supplier:'Heubach',      grade:'Phthalocyanine',   lf:'8 – Outstanding', date:'Aug 2024', icon:'🟢', notes:'', url:'#'},
+  {id:7, name:'Sudanyl Blue BN Disp.',     cat:'Dispersion',   type:'TDS',  shade:'Blue',   cas:'—',           code:'SBN-D',   ci:'—',          app:'Coatings',  supplier:'Sudarshan',    grade:'Aqueous',          lf:'—',              date:'Aug 2024', icon:'💧', notes:'35% pigment content. pH 8–9.', url:'#'},
+  {id:8, name:'Sudanyl Red RO Disp.',      cat:'Dispersion',   type:'TDS',  shade:'Red',    cas:'—',           code:'SRO-D',   ci:'—',          app:'Coatings',  supplier:'Sudarshan',    grade:'Aqueous',          lf:'—',              date:'Jul 2024', icon:'💧', notes:'', url:'#'},
+  {id:9, name:'Sudanyl Yellow GR Disp.',   cat:'Dispersion',   type:'MSDS', shade:'Yellow', cas:'—',           code:'SYG-D',   ci:'—',          app:'Coatings',  supplier:'Sudarshan',    grade:'Solvent-based',    lf:'—',              date:'Aug 2024', icon:'💧', notes:'Contains xylene. Adequate ventilation required.', url:'#'},
+  {id:10,name:'Coatings Portfolio 2024',   cat:'Presentation', type:'PPT',  shade:'—',      cas:'—',           code:'PRES-001',ci:'—',          app:'Coatings',  supplier:'—',            grade:'—',                lf:'—',              date:'Nov 2024', icon:'📊', notes:'Full product range for coatings segment.', url:'#'},
+  {id:11,name:'Plastics Application Deck', cat:'Presentation', type:'PPT',  shade:'—',      cas:'—',           code:'PRES-002',ci:'—',          app:'Plastics',  supplier:'—',            grade:'—',                lf:'—',              date:'Sep 2024', icon:'📊', notes:'', url:'#'},
+  {id:12,name:'Product Brochure 2024',     cat:'Brochure',     type:'PDF',  shade:'—',      cas:'—',           code:'BRO-001', ci:'—',          app:'General',   supplier:'—',            grade:'—',                lf:'—',              date:'Oct 2024', icon:'📄', notes:'Corporate full-range brochure.', url:'#'},
+  {id:13,name:'Effect Pigments Brochure',  cat:'Brochure',     type:'PDF',  shade:'Multi',  cas:'—',           code:'BRO-002', ci:'—',          app:'Coatings',  supplier:'—',            grade:'—',                lf:'—',              date:'Jun 2024', icon:'📄', notes:'', url:'#'},
+  {id:14,name:'RAL Shades — Coatings',     cat:'Plastic',      type:'CARD', shade:'Multi',  cas:'—',           code:'CARD-RAL',ci:'—',          app:'Coatings',  supplier:'—',            grade:'—',                lf:'—',              date:'May 2024', icon:'🎨', notes:'195 RAL Classic shades formulated.', url:'#'},
+  {id:15,name:'Pantone Shades — Plastics', cat:'Plastic',      type:'CARD', shade:'Multi',  cas:'—',           code:'CARD-PAN',ci:'—',          app:'Plastics',  supplier:'—',            grade:'—',                lf:'—',              date:'May 2024', icon:'🎨', notes:'', url:'#'},
+  {id:16,name:'REACH Compliance Doc',      cat:'Regulatory',   type:'REG',  shade:'—',      cas:'—',           code:'REG-001', ci:'—',          app:'General',   supplier:'—',            grade:'—',                lf:'—',              date:'Nov 2024', icon:'📋', notes:'Valid until Dec 2025. Annual review required.', url:'#'},
+  {id:17,name:'SDS — EU GHS Format',       cat:'Regulatory',   type:'REG',  shade:'—',      cas:'—',           code:'REG-002', ci:'—',          app:'General',   supplier:'—',            grade:'—',                lf:'—',              date:'Oct 2024', icon:'📋', notes:'Compliant with Regulation (EC) 1907/2006.', url:'#'},
+];
+
+let sel=[], filter='all', q='';
+
+function getList(){
+  const lq=q.toLowerCase();
+  return DOCS.filter(d=>{
+    const cOk=filter==='all'||d.cat===filter;
+    const qOk=!lq||[d.name,d.cas,d.shade,d.type,d.code,d.ci,d.app,d.supplier,d.grade,d.notes].some(v=>v&&v.toLowerCase().includes(lq));
+    return cOk&&qOk;
+  });
+}
+
+function tBadge(t){ return `<span class="tag ${TC[t]||'tag-tds'}">${t}</span>`; }
+
+function buildFields(d){
+  return [
+    d.code&&d.code!=='—'?`<div class="cf"><div class="cf-l">Product Code</div><div class="cf-v accent">${d.code}</div></div>`:'',
+    d.cas&&d.cas!=='—'?`<div class="cf"><div class="cf-l">CAS No.</div><div class="cf-v cas">${d.cas}</div></div>`:'',
+    d.ci&&d.ci!=='—'?`<div class="cf"><div class="cf-l">Colour Index</div><div class="cf-v">${d.ci}</div></div>`:'',
+    d.shade&&d.shade!=='—'?`<div class="cf"><div class="cf-l">Shade</div><div class="cf-v">${d.shade}</div></div>`:'',
+    d.app&&d.app!=='—'?`<div class="cf"><div class="cf-l">Application</div><div class="cf-v">${d.app}</div></div>`:'',
+    d.supplier&&d.supplier!=='—'?`<div class="cf"><div class="cf-l">Supplier</div><div class="cf-v">${d.supplier}</div></div>`:'',
+    d.grade&&d.grade!=='—'?`<div class="cf"><div class="cf-l">Grade</div><div class="cf-v">${d.grade}</div></div>`:'',
+    d.lf&&d.lf!=='—'?`<div class="cf"><div class="cf-l">Lightfastness</div><div class="cf-v">${d.lf}</div></div>`:'',
+  ].filter(Boolean).join('');
+}
+
+function render(){
+  const list=getList();
+  document.getElementById('resCnt').textContent=list.length+' result'+(list.length!==1?'s':'');
+  document.getElementById('stAll').textContent=list.length;
+  document.getElementById('stTDS').textContent=list.filter(d=>d.type==='TDS').length;
+  document.getElementById('stMSDS').textContent=list.filter(d=>d.type==='MSDS').length;
+
+  const g=document.getElementById('cardGrid');
+  if(!list.length){
+    g.innerHTML=`<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">No documents found</div><div class="empty-sub">Try a different search or category</div></div>`;
+    return;
+  }
+  g.innerHTML=list.map((d,i)=>{
+    const c=CAT[d.cat]||CAT.Pigment;
+    const isSel=sel.includes(d.id);
+    const flds=buildFields(d);
+    return `<div class="card${isSel?' sel':''}"
+      style="--cc-deep:${c.deep};--cc-deep2:${c.deep2};--cc-bg:${c.bg};--cc-mid:${c.mid};--cc-shadow:${c.shadow};animation-delay:${Math.min(i*30,200)}ms"
+      data-cat="${d.cat}" onclick="openDetail(${d.id})">
+      <div class="card-head">
+        <div class="card-icon">${d.icon}</div>
+        <div class="card-info">
+          <div class="card-name">${d.name}</div>
+          <div class="card-tags">
+            <span class="tag tag-cat">${d.cat}</span>
+            ${tBadge(d.type)}
+            <span style="font-size:10px;color:var(--t3);font-weight:600;align-self:center">${d.date}</span>
+          </div>
+        </div>
+      </div>
+      ${flds?`<div class="card-fields">${flds}</div>`:''}
+      <div class="card-actions">
+        <button class="ca ca-dl" onclick="event.stopPropagation();dlDoc(${d.id})">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+        <button class="ca ca-sel${isSel?' on':''}" onclick="event.stopPropagation();toggleSel(${d.id})">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          ${isSel?'Selected':'Compare'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleSel(id){
+  const i=sel.indexOf(id);
+  if(i===-1){if(sel.length>=2)sel.shift();sel.push(id);}
+  else sel.splice(i,1);
+  updateBar(); render();
+}
+function clearSel(){sel=[];updateBar();render();}
+function updateBar(){
+  const bar=document.getElementById('cmpBar');
+  document.getElementById('selCnt').textContent=sel.length;
+  document.getElementById('selNames').textContent=sel.length===0?'Select 2 documents to compare':sel.map(id=>{const d=DOCS.find(x=>x.id===id);return d?d.name:''}).join(' vs ');
+  document.getElementById('btnDo').disabled=sel.length<2;
+  bar.classList.toggle('on',sel.length>0);
+}
+function dlDoc(id){
+  const d=DOCS.find(x=>x.id===id);
+  if(d&&d.url&&d.url!=='#')window.open(d.url,'_blank');
+  else alert('File URL not configured yet.\nIn production this opens the Google Drive link for this document.');
+}
+
+document.getElementById('searchInput').addEventListener('input',function(){
+  q=this.value;
+  document.getElementById('searchClear').classList.toggle('on',!!this.value);
+  render();
+});
+function clearSearch(){document.getElementById('searchInput').value='';q='';document.getElementById('searchClear').classList.remove('on');render();}
+
+document.getElementById('catStrip').addEventListener('click',e=>{
+  const p=e.target.closest('.pill');if(!p)return;
+  document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+  p.classList.add('active');filter=p.dataset.cat;render();
+});
+
+function openSheet(id){document.getElementById('overlay').classList.add('on');document.getElementById(id).classList.add('on');document.body.style.overflow='hidden';}
+function closeAll(){document.getElementById('overlay').classList.remove('on');['detailSheet','cmpSheet','uploadSheet'].forEach(id=>document.getElementById(id).classList.remove('on'));document.body.style.overflow='';}
+
+function openDetail(id){
+  const d=DOCS.find(x=>x.id===id);if(!d)return;
+  const c=CAT[d.cat]||CAT.Pigment;
+  const isSel=sel.includes(d.id);
+  document.getElementById('detDot').style.background=`linear-gradient(135deg,${c.deep},${c.deep2})`;
+  document.getElementById('detDot').style.width='22px';
+  document.getElementById('detDot').style.height='11px';
+  document.getElementById('detDot').style.borderRadius='6px';
+
+  const flds=[
+    {l:'Product Code',v:d.code,cls:'accent'},{l:'CAS Number',v:d.cas,cls:'mono'},
+    {l:'Colour Index',v:d.ci,cls:''},{l:'Shade',v:d.shade,cls:''},
+    {l:'Application',v:d.app,cls:''},{l:'Supplier',v:d.supplier,cls:''},
+    {l:'Grade',v:d.grade,cls:''},{l:'Lightfastness',v:d.lf,cls:''},{l:'Date',v:d.date,cls:''},
+  ].filter(f=>f.v&&f.v!=='—');
+
+  document.getElementById('detBody').innerHTML=`
+    <div class="det-hero" style="--cc-bg:${c.bg};--cc-mid:${c.mid}">
+      <div class="det-icon" style="--cc-mid:${c.mid};--cc-bg:${c.bg}">${d.icon}</div>
+      <div>
+        <div class="det-name">${d.name}</div>
+        <div class="det-badges">${tBadge(d.type)}<span class="tag tag-cat" style="--cc-deep:${c.deep};--cc-bg:${c.bg};--cc-mid:${c.mid}">${d.cat}</span></div>
+      </div>
+    </div>
+    <div class="det-sec">
+      <div class="det-sec-t">Technical Fields</div>
+      <div class="det-grid">
+        ${flds.map(f=>`<div class="det-f"><div class="det-fl">${f.l}</div><div class="det-fv ${f.cls}" style="${f.cls==='accent'?'color:'+c.deep:''}">${f.v}</div></div>`).join('')}
+        ${d.notes?`<div class="det-f full"><div class="det-fl">Notes</div><div class="det-fv note">${d.notes}</div></div>`:''}
+      </div>
+    </div>
+    <button class="btn-dl" style="--cc-deep:${c.deep};--cc-deep2:${c.deep2};--cc-shadow:${c.shadow}" onclick="dlDoc(${d.id})">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download File
+    </button>
+    <button class="btn-sel-det${isSel?' on':''}" id="dsbtn" onclick="toggleSelDet(${d.id})">
+      ${isSel?'✓ Selected for Compare':'+ Add to Compare'}
+    </button>`;
+  openSheet('detailSheet');
+}
+function toggleSelDet(id){
+  toggleSel(id);const on=sel.includes(id);
+  const btn=document.getElementById('dsbtn');
+  btn.textContent=on?'✓ Selected for Compare':'+ Add to Compare';
+  btn.classList.toggle('on',on);
+}
+
+function openCmpSheet(){
+  if(sel.length<2)return;
+  const [a,b]=sel.map(id=>DOCS.find(d=>d.id===id));
+  const ca=CAT[a.cat]||CAT.Pigment, cb=CAT[b.cat]||CAT.Pigment;
+  const rows=[
+    {l:'Category',va:a.cat,vb:b.cat},{l:'Doc Type',va:a.type,vb:b.type},
+    {l:'Product Code',va:a.code,vb:b.code},{l:'CAS No.',va:a.cas,vb:b.cas},
+    {l:'Colour Index',va:a.ci,vb:b.ci},{l:'Shade',va:a.shade,vb:b.shade},
+    {l:'Application',va:a.app,vb:b.app},{l:'Supplier',va:a.supplier,vb:b.supplier},
+    {l:'Grade',va:a.grade,vb:b.grade},{l:'Lightfastness',va:a.lf,vb:b.lf},
+    {l:'Updated',va:a.date,vb:b.date},
+  ].filter(r=>r.va!=='—'||r.vb!=='—');
+
+  document.getElementById('cmpBody').innerHTML=`
+    <div class="cmp-pair">
+      <div class="cmp-dc" style="background:${ca.bg};border-color:${ca.mid}">
+        <div class="cmp-dc-icon">${a.icon}</div>
+        <div class="cmp-dc-name" style="color:${ca.deep}">${a.name}</div>
+        <div class="cmp-dc-type">${a.type} · ${a.date}</div>
+      </div>
+      <div class="cmp-vs">VS</div>
+      <div class="cmp-dc" style="background:${cb.bg};border-color:${cb.mid}">
+        <div class="cmp-dc-icon">${b.icon}</div>
+        <div class="cmp-dc-name" style="color:${cb.deep}">${b.name}</div>
+        <div class="cmp-dc-type">${b.type} · ${b.date}</div>
+      </div>
+    </div>
+    <table class="cmp-tbl">
+      <thead><tr>
+        <th>Field</th>
+        <th style="color:${ca.deep}">${a.name.split(' ').slice(0,2).join(' ')}</th>
+        <th style="color:${cb.deep}">${b.name.split(' ').slice(0,2).join(' ')}</th>
+        <th></th>
+      </tr></thead>
+      <tbody>${rows.map(r=>{
+        const same=r.va===r.vb;
+        return`<tr><td>${r.l}</td><td class="td-a" style="color:${ca.deep}">${r.va}</td><td class="td-b" style="color:${cb.deep}">${r.vb}</td><td><span class="mtag ${same?'m-eq':'m-df'}">${same?'=':'≠'}</span></td></tr>`;
+      }).join('')}</tbody>
+    </table>
+    <button class="btn-ai" onclick="aiCmp()">✦ AI Deep Comparison</button>`;
+
+  closeAll();
+  setTimeout(()=>openSheet('cmpSheet'),80);
+}
+
+function aiCmp(){
+  const [a,b]=sel.map(id=>DOCS.find(d=>d.id===id));
+  closeAll();
+  if(typeof sendPrompt==='function'){
+    sendPrompt(`Deep technical comparison of "${a.name}" (${a.type}, CAS: ${a.cas}, Application: ${a.app}, Grade: ${a.grade}, Lightfastness: ${a.lf}) vs "${b.name}" (${b.type}, CAS: ${b.cas}, Application: ${b.app}, Grade: ${b.grade}, Lightfastness: ${b.lf}). Cover: chemical differences, safety handling, application suitability, regulatory status, and a clear recommendation.`);
+  } else {
+    alert('AI compare: sends a detailed comparison prompt to Claude for these two documents.');
+  }
+}
+
+function setPage(p){
+  document.querySelectorAll('.bni').forEach(n=>n.classList.remove('active'));
+  document.querySelector(`.bni[data-p="${p}"]`).classList.add('active');
+  if(p==='compare'){sel.length>=2?openCmpSheet():alert('Select 2 documents first using the Compare button on any card.');}
+  if(p==='settings')alert('Settings: Configure Google Sheet URL, sync schedule, and notification preferences.');
+}
+
+render();
+</script>
+</body>
+</html>
