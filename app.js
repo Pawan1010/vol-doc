@@ -31,26 +31,26 @@ const SEGMENTS = [
 ];
 
 const DOCS = [
-  {id:1,  name:'Pigment Yellow 13',         cat:'Pigment',      type:'TDS',  shade:'Yellow', cas:'5102-83-0',   code:'PY-013',  ci:'C.I. 21100', app:'Coatings',  supplier:'Clariant',     grade:'High Performance', lf:'6 – Very Good',   date:'Nov 2024', icon:'🟡', driveUrl:'', notes:'High heat stability. Suitable for solvent-based systems.'},
-  {id:2,  name:'Pigment Yellow 13',         cat:'Pigment',      type:'MSDS', shade:'Yellow', cas:'5102-83-0',   code:'PY-013',  ci:'C.I. 21100', app:'Coatings',  supplier:'Clariant',     grade:'High Performance', lf:'6 – Very Good',   date:'Nov 2024', icon:'🟡', driveUrl:'', notes:'Handle with PPE. Store below 40°C.'},
-  {id:3,  name:'Pigment Red 254',           cat:'Pigment',      type:'TDS',  shade:'Red',    cas:'122390-98-1', code:'PR-254',  ci:'C.I. 56110', app:'Plastics',  supplier:'BASF',         grade:'DPP Red',          lf:'8 – Outstanding', date:'Oct 2024', icon:'🔴', driveUrl:'', notes:'Excellent lightfastness. Heat stable to 300°C.'},
-  {id:4,  name:'Pigment Red 254',           cat:'Pigment',      type:'MSDS', shade:'Red',    cas:'122390-98-1', code:'PR-254',  ci:'C.I. 56110', app:'Plastics',  supplier:'BASF',         grade:'DPP Red',          lf:'8 – Outstanding', date:'Sep 2024', icon:'🔴', driveUrl:'', notes:'Not classified hazardous under GHS.'},
-  {id:5,  name:'Pigment Blue 15:3',         cat:'Pigment',      type:'TDS',  shade:'Blue',   cas:'147-14-8',    code:'PB-153',  ci:'C.I. 74160', app:'Inks',      supplier:'Sun Chemical', grade:'Phthalocyanine',   lf:'7 – Excellent',  date:'Nov 2024', icon:'🔵', driveUrl:'', notes:'Excellent transparency for process printing.'},
-  {id:6,  name:'Pigment Green 7',           cat:'Pigment',      type:'TDS',  shade:'Green',  cas:'1328-53-6',   code:'PG-007',  ci:'C.I. 74260', app:'General',   supplier:'Heubach',      grade:'Phthalocyanine',   lf:'8 – Outstanding', date:'Aug 2024', icon:'🟢', driveUrl:'', notes:''},
-  {id:7,  name:'Pigment Violet 23',         cat:'Pigment',      type:'MSDS', shade:'Violet', cas:'6358-30-1',   code:'PV-023',  ci:'C.I. 51319', app:'Coatings',  supplier:'Clariant',     grade:'Standard',         lf:'7 – Excellent',  date:'Sep 2024', icon:'🟣', driveUrl:'', notes:'Avoid inhalation of dust.'},
-  {id:8,  name:'Sudanyl Blue BN Disp.',     cat:'Dispersion',   type:'TDS',  shade:'Blue',   cas:'—',           code:'SBN-D',   ci:'—',          app:'Coatings',  supplier:'Sudarshan',    grade:'Aqueous',          lf:'—',              date:'Aug 2024', icon:'💧', driveUrl:'', notes:'35% pigment content. pH 8–9.'},
-  {id:9,  name:'Sudanyl Red RO Disp.',      cat:'Dispersion',   type:'TDS',  shade:'Red',    cas:'—',           code:'SRO-D',   ci:'—',          app:'Coatings',  supplier:'Sudarshan',    grade:'Aqueous',          lf:'—',              date:'Jul 2024', icon:'💧', driveUrl:'', notes:''},
-  {id:10, name:'Sudanyl Yellow GR Disp.',   cat:'Dispersion',   type:'MSDS', shade:'Yellow', cas:'—',           code:'SYG-D',   ci:'—',          app:'Coatings',  supplier:'Sudarshan',    grade:'Solvent-based',    lf:'—',              date:'Aug 2024', icon:'💧', driveUrl:'', notes:'Contains xylene. Adequate ventilation required.'},
-  {id:11, name:'Sudanyl Green FG Disp.',    cat:'Dispersion',   type:'TDS',  shade:'Green',  cas:'—',           code:'SGF-D',   ci:'—',          app:'Plastics',  supplier:'Sudarshan',    grade:'Aqueous',          lf:'—',              date:'Oct 2024', icon:'💧', driveUrl:'', notes:'Good shear stability.'},
-  {id:12, name:'Coatings Portfolio 2024',   cat:'Presentation', type:'PPT',  shade:'—',      cas:'—',           code:'PRES-001',ci:'—',          app:'Coatings',  supplier:'—',            grade:'—',                lf:'—',              date:'Nov 2024', icon:'📊', driveUrl:'', notes:'Full product range for coatings segment.'},
-  {id:13, name:'Plastics Application Deck', cat:'Presentation', type:'PPT',  shade:'—',      cas:'—',           code:'PRES-002',ci:'—',          app:'Plastics',  supplier:'—',            grade:'—',                lf:'—',              date:'Sep 2024', icon:'📊', driveUrl:'', notes:''},
-  {id:14, name:'Inks & Printing Overview',  cat:'Presentation', type:'PPT',  shade:'—',      cas:'—',           code:'PRES-003',ci:'—',          app:'Inks',      supplier:'—',            grade:'—',                lf:'—',              date:'Jul 2024', icon:'📊', driveUrl:'', notes:'Covers flexo and gravure applications.'},
-  {id:15, name:'Product Brochure 2024',     cat:'Brochure',     type:'PDF',  shade:'—',      cas:'—',           code:'BRO-001', ci:'—',          app:'General',   supplier:'—',            grade:'—',                lf:'—',              date:'Oct 2024', icon:'📄', driveUrl:'', notes:'Corporate full-range brochure.'},
-  {id:16, name:'Effect Pigments Brochure',  cat:'Brochure',     type:'PDF',  shade:'Multi',  cas:'—',           code:'BRO-002', ci:'—',          app:'Coatings',  supplier:'—',            grade:'—',                lf:'—',              date:'Jun 2024', icon:'📄', driveUrl:'', notes:''},
-  {id:17, name:'RAL Shades — Coatings',     cat:'Plastic',      type:'CARD', shade:'Multi',  cas:'—',           code:'CARD-RAL',ci:'—',          app:'Coatings',  supplier:'—',            grade:'—',                lf:'—',              date:'May 2024', icon:'🎨', driveUrl:'', notes:'195 RAL Classic shades formulated.'},
-  {id:18, name:'Pantone Shades — Plastics', cat:'Plastic',      type:'CARD', shade:'Multi',  cas:'—',           code:'CARD-PAN',ci:'—',          app:'Plastics',  supplier:'—',            grade:'—',                lf:'—',              date:'May 2024', icon:'🎨', driveUrl:'', notes:''},
-  {id:19, name:'REACH Compliance Doc',      cat:'Regulatory',   type:'REG',  shade:'—',      cas:'—',           code:'REG-001', ci:'—',          app:'General',   supplier:'—',            grade:'—',                lf:'—',              date:'Nov 2024', icon:'📋', driveUrl:'', notes:'Valid until Dec 2025. Annual review required.'},
-  {id:20, name:'SDS — EU GHS Format',       cat:'Regulatory',   type:'REG',  shade:'—',      cas:'—',           code:'REG-002', ci:'—',          app:'General',   supplier:'—',            grade:'—',                lf:'—',              date:'Oct 2024', icon:'📋', driveUrl:'', notes:'Compliant with Regulation (EC) 1907/2006.'},
+//   {id:1,  name:'Pigment Yellow 13',         cat:'Pigment',      type:'TDS',  shade:'Yellow', cas:'5102-83-0',   code:'PY-013',  ci:'C.I. 21100', app:'Coatings',  supplier:'Clariant',     grade:'High Performance', lf:'6 – Very Good',   date:'Nov 2024', icon:'🟡', driveUrl:'', notes:'High heat stability. Suitable for solvent-based systems.'},
+//   {id:2,  name:'Pigment Yellow 13',         cat:'Pigment',      type:'MSDS', shade:'Yellow', cas:'5102-83-0',   code:'PY-013',  ci:'C.I. 21100', app:'Coatings',  supplier:'Clariant',     grade:'High Performance', lf:'6 – Very Good',   date:'Nov 2024', icon:'🟡', driveUrl:'', notes:'Handle with PPE. Store below 40°C.'},
+//   {id:3,  name:'Pigment Red 254',           cat:'Pigment',      type:'TDS',  shade:'Red',    cas:'122390-98-1', code:'PR-254',  ci:'C.I. 56110', app:'Plastics',  supplier:'BASF',         grade:'DPP Red',          lf:'8 – Outstanding', date:'Oct 2024', icon:'🔴', driveUrl:'', notes:'Excellent lightfastness. Heat stable to 300°C.'},
+//   {id:4,  name:'Pigment Red 254',           cat:'Pigment',      type:'MSDS', shade:'Red',    cas:'122390-98-1', code:'PR-254',  ci:'C.I. 56110', app:'Plastics',  supplier:'BASF',         grade:'DPP Red',          lf:'8 – Outstanding', date:'Sep 2024', icon:'🔴', driveUrl:'', notes:'Not classified hazardous under GHS.'},
+//   {id:5,  name:'Pigment Blue 15:3',         cat:'Pigment',      type:'TDS',  shade:'Blue',   cas:'147-14-8',    code:'PB-153',  ci:'C.I. 74160', app:'Inks',      supplier:'Sun Chemical', grade:'Phthalocyanine',   lf:'7 – Excellent',  date:'Nov 2024', icon:'🔵', driveUrl:'', notes:'Excellent transparency for process printing.'},
+//   {id:6,  name:'Pigment Green 7',           cat:'Pigment',      type:'TDS',  shade:'Green',  cas:'1328-53-6',   code:'PG-007',  ci:'C.I. 74260', app:'General',   supplier:'Heubach',      grade:'Phthalocyanine',   lf:'8 – Outstanding', date:'Aug 2024', icon:'🟢', driveUrl:'', notes:''},
+//   {id:7,  name:'Pigment Violet 23',         cat:'Pigment',      type:'MSDS', shade:'Violet', cas:'6358-30-1',   code:'PV-023',  ci:'C.I. 51319', app:'Coatings',  supplier:'Clariant',     grade:'Standard',         lf:'7 – Excellent',  date:'Sep 2024', icon:'🟣', driveUrl:'', notes:'Avoid inhalation of dust.'},
+//   {id:8,  name:'Sudanyl Blue BN Disp.',     cat:'Dispersion',   type:'TDS',  shade:'Blue',   cas:'—',           code:'SBN-D',   ci:'—',          app:'Coatings',  supplier:'Sudarshan',    grade:'Aqueous',          lf:'—',              date:'Aug 2024', icon:'💧', driveUrl:'', notes:'35% pigment content. pH 8–9.'},
+//   {id:9,  name:'Sudanyl Red RO Disp.',      cat:'Dispersion',   type:'TDS',  shade:'Red',    cas:'—',           code:'SRO-D',   ci:'—',          app:'Coatings',  supplier:'Sudarshan',    grade:'Aqueous',          lf:'—',              date:'Jul 2024', icon:'💧', driveUrl:'', notes:''},
+//   {id:10, name:'Sudanyl Yellow GR Disp.',   cat:'Dispersion',   type:'MSDS', shade:'Yellow', cas:'—',           code:'SYG-D',   ci:'—',          app:'Coatings',  supplier:'Sudarshan',    grade:'Solvent-based',    lf:'—',              date:'Aug 2024', icon:'💧', driveUrl:'', notes:'Contains xylene. Adequate ventilation required.'},
+//   {id:11, name:'Sudanyl Green FG Disp.',    cat:'Dispersion',   type:'TDS',  shade:'Green',  cas:'—',           code:'SGF-D',   ci:'—',          app:'Plastics',  supplier:'Sudarshan',    grade:'Aqueous',          lf:'—',              date:'Oct 2024', icon:'💧', driveUrl:'', notes:'Good shear stability.'},
+//   {id:12, name:'Coatings Portfolio 2024',   cat:'Presentation', type:'PPT',  shade:'—',      cas:'—',           code:'PRES-001',ci:'—',          app:'Coatings',  supplier:'—',            grade:'—',                lf:'—',              date:'Nov 2024', icon:'📊', driveUrl:'', notes:'Full product range for coatings segment.'},
+//   {id:13, name:'Plastics Application Deck', cat:'Presentation', type:'PPT',  shade:'—',      cas:'—',           code:'PRES-002',ci:'—',          app:'Plastics',  supplier:'—',            grade:'—',                lf:'—',              date:'Sep 2024', icon:'📊', driveUrl:'', notes:''},
+//   {id:14, name:'Inks & Printing Overview',  cat:'Presentation', type:'PPT',  shade:'—',      cas:'—',           code:'PRES-003',ci:'—',          app:'Inks',      supplier:'—',            grade:'—',                lf:'—',              date:'Jul 2024', icon:'📊', driveUrl:'', notes:'Covers flexo and gravure applications.'},
+//   {id:15, name:'Product Brochure 2024',     cat:'Brochure',     type:'PDF',  shade:'—',      cas:'—',           code:'BRO-001', ci:'—',          app:'General',   supplier:'—',            grade:'—',                lf:'—',              date:'Oct 2024', icon:'📄', driveUrl:'', notes:'Corporate full-range brochure.'},
+//   {id:16, name:'Effect Pigments Brochure',  cat:'Brochure',     type:'PDF',  shade:'Multi',  cas:'—',           code:'BRO-002', ci:'—',          app:'Coatings',  supplier:'—',            grade:'—',                lf:'—',              date:'Jun 2024', icon:'📄', driveUrl:'', notes:''},
+//   {id:17, name:'RAL Shades — Coatings',     cat:'Plastic',      type:'CARD', shade:'Multi',  cas:'—',           code:'CARD-RAL',ci:'—',          app:'Coatings',  supplier:'—',            grade:'—',                lf:'—',              date:'May 2024', icon:'🎨', driveUrl:'', notes:'195 RAL Classic shades formulated.'},
+//   {id:18, name:'Pantone Shades — Plastics', cat:'Plastic',      type:'CARD', shade:'Multi',  cas:'—',           code:'CARD-PAN',ci:'—',          app:'Plastics',  supplier:'—',            grade:'—',                lf:'—',              date:'May 2024', icon:'🎨', driveUrl:'', notes:''},
+//   {id:19, name:'REACH Compliance Doc',      cat:'Regulatory',   type:'REG',  shade:'—',      cas:'—',           code:'REG-001', ci:'—',          app:'General',   supplier:'—',            grade:'—',                lf:'—',              date:'Nov 2024', icon:'📋', driveUrl:'', notes:'Valid until Dec 2025. Annual review required.'},
+//   {id:20, name:'SDS — EU GHS Format',       cat:'Regulatory',   type:'REG',  shade:'—',      cas:'—',           code:'REG-002', ci:'—',          app:'General',   supplier:'—',            grade:'—',                lf:'—',              date:'Oct 2024', icon:'📋', driveUrl:'', notes:'Compliant with Regulation (EC) 1907/2006.'},
 ];
 
 
@@ -65,9 +65,12 @@ async function loadDocs() {
   try {
     const res  = await fetch(APPS_SCRIPT_URL + '?action=getDocs');
     const data = await res.json();
-    if (data.docs && Array.isArray(data.docs) && data.docs.length > 0) {
-      DOCS.length = 0;
+    console.log({data});
+    console.log(data.docs && Array.isArray(data.docs))
+    if (data.docs && Array.isArray(data.docs)) {
+        console.log("Data loaded from Google Sheet:", data.docs);
       DOCS.push(...data.docs);
+      console.log("docs: ", DOCS);
     }
   } catch (err) {
     console.warn('Could not load from Google Sheet — showing local data.', err);
@@ -78,7 +81,7 @@ async function loadDocs() {
 const GDrive = {
 
   pickFile() {
-    alert('Google Drive Picker — wire up the Google Picker API to enable this (see integration guide in index.html).');
+   GDrivePickerOpen()
   },
 
   async saveDocument() {
@@ -150,7 +153,10 @@ const GDrive = {
    HELPERS
 ════════════════════════════════════════════ */
 const Helpers = {
-  segDocs: (key) => DOCS.filter(d => d.cat === key),
+  segDocs: (key, docs=DOCS) => { 
+    console.log("docs-from-helper: ",docs);
+    return docs.filter(d => d.cat === key); 
+},
   seg:     (key) => SEGMENTS.find(s => s.key === key),
 
   typeBadge(type) {
@@ -176,7 +182,9 @@ const Home = {
     document.getElementById('statMSDS').textContent  = DOCS.filter(d => d.type === 'MSDS').length;
 
     document.getElementById('tileGrid').innerHTML = SEGMENTS.map((s, i) => {
-      const docs = Helpers.segDocs(s.key);
+        console.log("from home render: ",{DOCS})
+      const docs = Helpers.segDocs(s.key, DOCS);
+      console.log('docs-segment: ', docs);
       const tds  = docs.filter(d => d.type === 'TDS').length;
       const msds = docs.filter(d => d.type === 'MSDS').length;
 

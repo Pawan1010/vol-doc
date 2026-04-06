@@ -190,6 +190,40 @@
   </div>
 </div>
 
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+      const CLIENT_ID = '761770759953-arhh5m8cjrlrongnu2uj83i0davlci01.apps.googleusercontent.com';
+      const API_KEY   = 'AIzaSyCHfezx9Ue_eJvz8WRwMRFPYWAnSo_Jcik';
+      const SCOPES    = 'https://www.googleapis.com/auth/drive.readonly';
+
+      gapi.load('picker', () => {});   // preload
+
+      function GDrivePickerOpen() {
+        const tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: CLIENT_ID,
+          scope: SCOPES,
+          callback: (resp) => {
+            const picker = new google.picker.PickerBuilder()
+              .addView(google.picker.ViewId.DOCS)
+              .setOAuthToken(resp.access_token)
+              .setDeveloperKey(API_KEY)
+              .setCallback((data) => {
+                if (data.action === google.picker.Action.PICKED) {
+                  const file = data.docs[0];
+                  document.getElementById('fDriveURL').value = file.url;
+                  document.getElementById('fName').value =
+                    document.getElementById('fName').value || file.name;
+                }
+              })
+              .build();
+            picker.setVisible(true);
+          }
+        });
+        tokenClient.requestAccessToken();
+      }
+    </script>
+
 <!--
 ════════════════════════════════════════════════════════════
   GOOGLE DRIVE + SHEETS INTEGRATION GUIDE
@@ -300,38 +334,7 @@ OVERVIEW
      Add your app's origin to "Authorized JavaScript origins".
   3. Load the Picker API:
 
-    <script src="https://apis.google.com/js/api.js"></script>
-    <script>
-      const CLIENT_ID = '<YOUR_OAUTH_CLIENT_ID>';
-      const API_KEY   = '<YOUR_API_KEY>';
-      const SCOPES    = 'https://www.googleapis.com/auth/drive.readonly';
-
-      gapi.load('picker', () => {});   // preload
-
-      function GDrivePickerOpen() {
-        const tokenClient = google.accounts.oauth2.initTokenClient({
-          client_id: CLIENT_ID,
-          scope: SCOPES,
-          callback: (resp) => {
-            const picker = new google.picker.PickerBuilder()
-              .addView(google.picker.ViewId.DOCS)
-              .setOAuthToken(resp.access_token)
-              .setDeveloperKey(API_KEY)
-              .setCallback((data) => {
-                if (data.action === google.picker.Action.PICKED) {
-                  const file = data.docs[0];
-                  document.getElementById('fDriveURL').value = file.url;
-                  document.getElementById('fName').value =
-                    document.getElementById('fName').value || file.name;
-                }
-              })
-              .build();
-            picker.setVisible(true);
-          }
-        });
-        tokenClient.requestAccessToken();
-      }
-    </script>
+    
 
   4. In GDrive.pickFile(), call GDrivePickerOpen().
 
