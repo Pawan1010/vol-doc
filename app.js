@@ -1,11 +1,14 @@
+/* ════════════════════════════════════════════
+   CONFIG
+════════════════════════════════════════════ */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwb0LnS9XJw1rS3R6UJzp6YELRJYpx1mOQyLynviF9ooiQP4gndeceu0MHhqko8tmY3hA/exec';
+
 
 /* ════════════════════════════════════════════
    DATA LAYER
-   ─ In production: replace DOCS with a fetch()
-     call to your Google Apps Script web app.
+   ─ DOCS is populated by loadDocs() on startup.
+   ─ The static array below is a fallback only.
 ════════════════════════════════════════════ */
-
-/** @type {Segment[]} */
 const SEGMENTS = [
   { key:'Pigment',      label:'Pigments',       icon:'🧪', desc:'Dry powder colorants',
     a:'var(--pig-a)', b:'var(--pig-b)', deep:'#be185d', deep2:'#e11d48',
@@ -50,23 +53,34 @@ const DOCS = [
   {id:20, name:'SDS — EU GHS Format',       cat:'Regulatory',   type:'REG',  shade:'—',      cas:'—',           code:'REG-002', ci:'—',          app:'General',   supplier:'—',            grade:'—',                lf:'—',              date:'Oct 2024', icon:'📋', driveUrl:'', notes:'Compliant with Regulation (EC) 1907/2006.'},
 ];
 
+
 /* ════════════════════════════════════════════
-   GOOGLE DRIVE / SHEETS INTEGRATION LAYER
-   ─ Replace the stub functions below with
-     real Google API calls (see integration
-     guide at the bottom of this file).
+   GOOGLE SHEETS INTEGRATION
+   loadDocs()      — fetches rows from Sheet on startup
+   GDrive.saveDocument() — appends a new row to Sheet
+   GDrive.openFile()     — opens the Drive link
 ════════════════════════════════════════════ */
+
+async function loadDocs() {
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL + '?action=getDocs');
+    const data = await res.json();
+    if (data.docs && Array.isArray(data.docs) && data.docs.length > 0) {
+      DOCS.length = 0;
+      DOCS.push(...data.docs);
+    }
+  } catch (err) {
+    console.warn('Could not load from Google Sheet — showing local data.', err);
+  }
+  Home.render();
+}
+
 const GDrive = {
-  /** Stub: open Google Drive Picker */
+
   pickFile() {
-    alert('Google Drive Picker — see integration guide to wire this up.');
-    /* PRODUCTION:
-       1. Load the Google Picker API
-       2. Call google.picker.PickerBuilder() here
-       3. On pick, store the fileId & webViewLink  */
+    alert('Google Drive Picker — wire up the Google Picker API to enable this (see integration guide in index.html).');
   },
 
-  /** Stub: save a new document row to Google Sheets */
   async saveDocument() {
     const row = {
       name:     document.getElementById('fName').value.trim(),
@@ -89,38 +103,46 @@ const GDrive = {
       return;
     }
 
-    /* PRODUCTION:
-       const res = await fetch(APPS_SCRIPT_URL, {
-         method: 'POST',
-         body: JSON.stringify({ action: 'appendRow', row })
-       });
-       const data = await res.json();
-       if (data.ok) { ... refresh DOCS, re-render ... }  */
+    // Show saving state
+    const btn = document.querySelector('.btn-save');
+    btn.textContent = 'Saving…';
+    btn.disabled = true;
 
-    alert('Saved! In production this posts to your Google Apps Script web app, which appends a row to your Sheet and returns the new document record.');
-    UI.closeAll();
-  },
+    try {
+      const res  = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body:   JSON.stringify({ action: 'appendRow', row }),
+      });
+      const data = await res.json();
 
-  /** Stub: open a document from Google Drive */
-  openFile(doc) {
-    if (doc.driveUrl) {
-      window.open(doc.driveUrl, '_blank');
-    } else {
-      alert('No Drive URL linked for this document yet.\nEdit the record to add one.');
+      if (data.ok) {
+        // Refresh the full list from Sheet so new row appears
+        await loadDocs();
+        UI.closeAll();
+
+        // Reset form
+        ['fName','fCode','fCAS','fCI','fShade','fSupplier','fGrade','fDriveURL','fNotes']
+          .forEach(id => { document.getElementById(id).value = ''; });
+        ['fCat','fType','fApp','fLF']
+          .forEach(id => { document.getElementById(id).selectedIndex = 0; });
+      } else {
+        alert('Save failed: ' + (data.error || 'Unknown error from Apps Script.'));
+      }
+    } catch (err) {
+      alert('Network error — could not reach Google Apps Script.\n\n' + err.message);
+    } finally {
+      btn.textContent = 'Save Document';
+      btn.disabled = false;
     }
   },
 
-  /**
-   * PRODUCTION — fetch document list from Apps Script:
-   *
-   * async function loadDocs() {
-   *   const res = await fetch(APPS_SCRIPT_URL + '?action=getDocs');
-   *   const data = await res.json();
-   *   DOCS.length = 0;
-   *   DOCS.push(...data.docs);
-   *   Home.render();
-   * }
-   */
+  openFile(doc) {
+    if (doc.driveUrl && doc.driveUrl.trim() !== '') {
+      window.open(doc.driveUrl, '_blank');
+    } else {
+      alert('No Drive URL linked for this document yet.\nEdit the record in Google Sheets to add one.');
+    }
+  },
 };
 
 
@@ -135,7 +157,6 @@ const Helpers = {
     return `<span class="tag tag--${type}">${type}</span>`;
   },
 
-  /** Apply segment palette to a CSS context element */
   applyPalette(el, s) {
     el.style.setProperty('--cc-deep',   s.deep);
     el.style.setProperty('--cc-bg',     s.bg);
@@ -155,9 +176,9 @@ const Home = {
     document.getElementById('statMSDS').textContent  = DOCS.filter(d => d.type === 'MSDS').length;
 
     document.getElementById('tileGrid').innerHTML = SEGMENTS.map((s, i) => {
-      const docs  = Helpers.segDocs(s.key);
-      const tds   = docs.filter(d => d.type === 'TDS').length;
-      const msds  = docs.filter(d => d.type === 'MSDS').length;
+      const docs = Helpers.segDocs(s.key);
+      const tds  = docs.filter(d => d.type === 'TDS').length;
+      const msds = docs.filter(d => d.type === 'MSDS').length;
 
       return `
       <div class="tile" style="animation-delay:${i * 60}ms" onclick="SegView.open('${s.key}')">
@@ -190,7 +211,7 @@ const Home = {
    SEGMENT VIEW MODULE
 ════════════════════════════════════════════ */
 const SegView = {
-  activeKey: null,
+  activeKey:  null,
   typeFilter: 'all',
 
   open(key) {
@@ -201,25 +222,21 @@ const SegView = {
     const s    = Helpers.seg(key);
     const docs = Helpers.segDocs(key);
 
-    // Header
     document.getElementById('segName').textContent = s.label;
     document.getElementById('segSub').textContent  = `${docs.length} documents`;
+
     const badge = document.getElementById('segBadge');
     badge.textContent      = `${s.icon} ${s.key}`;
     badge.style.background = `linear-gradient(135deg,${s.a},${s.b})`;
     badge.style.color      = '#fff';
 
-    // Type pills
     const types = ['all', ...new Set(docs.map(d => d.type))];
     document.getElementById('typeRow').innerHTML = types.map(t =>
       `<div class="type-pill${t === 'all' ? ' active' : ''}" data-type="${t}">${t === 'all' ? 'All' : t}</div>`
     ).join('');
     this._styleActivePill(s);
-
-    // Mini stats
     this._renderStats(s, docs);
 
-    // Switch views
     document.getElementById('homeView').classList.remove('active');
     document.getElementById('segView').classList.add('active');
     document.getElementById('searchWrap').style.display = 'block';
@@ -308,7 +325,6 @@ const SegView = {
   },
 };
 
-// Type pill delegation
 document.getElementById('typeRow').addEventListener('click', e => {
   const p = e.target.closest('.type-pill');
   if (!p) return;
@@ -383,17 +399,17 @@ const Compare = {
     const cb = Helpers.seg(b.cat) || SEGMENTS[0];
 
     const rows = [
-      { l:'Category',     va:a.cat,      vb:b.cat      },
-      { l:'Doc Type',     va:a.type,     vb:b.type     },
-      { l:'Product Code', va:a.code,     vb:b.code     },
-      { l:'CAS No.',      va:a.cas,      vb:b.cas      },
-      { l:'Colour Index', va:a.ci,       vb:b.ci       },
-      { l:'Shade',        va:a.shade,    vb:b.shade    },
-      { l:'Application',  va:a.app,      vb:b.app      },
-      { l:'Supplier',     va:a.supplier, vb:b.supplier },
-      { l:'Grade',        va:a.grade,    vb:b.grade    },
-      { l:'Lightfastness',va:a.lf,       vb:b.lf       },
-      { l:'Updated',      va:a.date,     vb:b.date     },
+      { l:'Category',      va:a.cat,      vb:b.cat      },
+      { l:'Doc Type',      va:a.type,     vb:b.type     },
+      { l:'Product Code',  va:a.code,     vb:b.code     },
+      { l:'CAS No.',       va:a.cas,      vb:b.cas      },
+      { l:'Colour Index',  va:a.ci,       vb:b.ci       },
+      { l:'Shade',         va:a.shade,    vb:b.shade    },
+      { l:'Application',   va:a.app,      vb:b.app      },
+      { l:'Supplier',      va:a.supplier, vb:b.supplier },
+      { l:'Grade',         va:a.grade,    vb:b.grade    },
+      { l:'Lightfastness', va:a.lf,       vb:b.lf       },
+      { l:'Updated',       va:a.date,     vb:b.date     },
     ].filter(r => r.va !== '—' || r.vb !== '—');
 
     document.getElementById('cmpBody').innerHTML = `
@@ -438,7 +454,7 @@ const Compare = {
     UI.closeAll();
     const prompt = `Deep technical comparison of "${a.name}" (${a.type}, CAS:${a.cas}, App:${a.app}, Grade:${a.grade}, LF:${a.lf}) vs "${b.name}" (${b.type}, CAS:${b.cas}, App:${b.app}, Grade:${b.grade}, LF:${b.lf}). Cover: chemical differences, safety, application suitability, regulatory status, and a recommendation.`;
     if (typeof sendPrompt === 'function') sendPrompt(prompt);
-    else alert('AI Compare: sends this prompt to Claude:\n\n' + prompt);
+    else alert('AI Compare prompt:\n\n' + prompt);
   },
 };
 
@@ -455,15 +471,15 @@ const Detail = {
     document.getElementById('detDot').style.background = `linear-gradient(135deg,${s.a},${s.b})`;
 
     const fields = [
-      { l:'Product Code', v:d.code,     hi:true  },
-      { l:'CAS Number',   v:d.cas,      mono:true },
-      { l:'Colour Index', v:d.ci                  },
-      { l:'Shade',        v:d.shade               },
-      { l:'Application',  v:d.app                 },
-      { l:'Supplier',     v:d.supplier            },
-      { l:'Grade',        v:d.grade               },
-      { l:'Lightfastness',v:d.lf                  },
-      { l:'Date',         v:d.date                },
+      { l:'Product Code',  v:d.code,     hi:true   },
+      { l:'CAS Number',    v:d.cas,      mono:true  },
+      { l:'Colour Index',  v:d.ci                   },
+      { l:'Shade',         v:d.shade                },
+      { l:'Application',   v:d.app                  },
+      { l:'Supplier',      v:d.supplier             },
+      { l:'Grade',         v:d.grade                },
+      { l:'Lightfastness', v:d.lf                   },
+      { l:'Date',          v:d.date                 },
     ].filter(f => f.v && f.v !== '—');
 
     const isSel = Compare.selection.includes(d.id);
@@ -559,6 +575,9 @@ const Nav = {
 
 /* ════════════════════════════════════════════
    INIT
+   loadDocs() fetches live data from Google Sheet.
+   Falls back to the static DOCS array if offline
+   or if the Sheet has no rows yet.
 ════════════════════════════════════════════ */
 Search.init();
-Home.render();
+loadDocs();
