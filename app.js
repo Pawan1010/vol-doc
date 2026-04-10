@@ -16,7 +16,7 @@ const SEGMENTS = [
   { key:'Dispersion',   label:'Dispersions',    icon:'💧', desc:'Pre-dispersed pigment systems',
     a:'var(--dis-a)', b:'var(--dis-b)', deep:'#6d28d9', deep2:'#7c3aed',
     bg:'#f3f0ff', mid:'#ede9fe', shadow:'rgba(109,40,217,.3)' },
-  { key:'Presentation', label:'Presentations',  icon:'📊', desc:'Sales & application decks',
+  { key:'Comparison', label:'Comparisons',  icon:'📊', desc:'Document comparisons',
     a:'var(--pre-a)', b:'var(--pre-b)', deep:'#b45309', deep2:'#d97706',
     bg:'#fffbeb', mid:'#fef3c7', shadow:'rgba(180,83,9,.3)' },
   { key:'Brochure',     label:'Brochures',      icon:'📄', desc:'Product brochures & catalogs',
